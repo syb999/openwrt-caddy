@@ -24,7 +24,6 @@ PKG_USE_MIPS16:=0
 
 GO_PKG:=github.com/caddyserver/caddy
 GO_PKG_TAG:=-tags full
-GO_PKG_LDFLAGS:=-s -w
 
 include $(INCLUDE_DIR)/package.mk
 include $(TOPDIR)/feeds/packages/lang/golang/golang-package.mk
@@ -40,24 +39,6 @@ endef
 
 define Package/$(PKG_NAME)/description
 Caddy is an extensible server platform that uses TLS by default.
-endef
-
-define Package/$(PKG_NAME)-7621mmcbin
-  TITLE:=Caddy is an open source web server
-  URL:=https://caddyserver.com
-  SECTION:=net
-  CATEGORY:=Network
-  SUBMENU:=Web Servers/Proxies
-  DEPENDS:=$(GO_ARCH_DEPENDS) +libpthread
-endef
-
-define Package/$(PKG_NAME)-7621nobin
-  TITLE:=Caddy is an open source web server
-  URL:=https://caddyserver.com
-  SECTION:=net
-  CATEGORY:=Network
-  SUBMENU:=Web Servers/Proxies
-  DEPENDS:=$(GO_ARCH_DEPENDS) +libpthread
 endef
 
 define Build/Prepare
@@ -81,26 +62,6 @@ define Package/$(PKG_NAME)/install
 	$(INSTALL_CONF) ./files/limits.conf $(1)/etc/security/limits.conf
 endef
 
-define Package/$(PKG_NAME)-7621mmcbin/install
-	$(INSTALL_DIR) $(1)/mnt/mmcblk0p1/caddy1
-	$(INSTALL_DIR) $(1)/etc/caddy
-	$(INSTALL_CONF) ./files/Caddyfile $(1)/etc/caddy/Caddyfile
-	$(INSTALL_DIR) $(1)/etc/init.d
-	$(INSTALL_BIN) ./files/caddy7621mmcbin.init $(1)/etc/init.d/caddy
-	$(INSTALL_DIR) $(1)/etc/security
-	$(INSTALL_CONF) ./files/limits.conf $(1)/etc/security/limits.conf
-endef
-
-define Package/$(PKG_NAME)-7621nobin/install
-	$(INSTALL_DIR) $(1)/etc/caddy
-	$(INSTALL_CONF) ./files/Caddyfile $(1)/etc/caddy/Caddyfile
-	$(INSTALL_DIR) $(1)/etc/init.d
-	$(INSTALL_BIN) ./files/caddy7621nobin.init $(1)/etc/init.d/caddy
-	$(INSTALL_DIR) $(1)/etc/security
-	$(INSTALL_CONF) ./files/limits.conf $(1)/etc/security/limits.conf
-endef
 
 $(eval $(call GoBinPackage,$(PKG_NAME)))
 $(eval $(call BuildPackage,$(PKG_NAME)))
-$(eval $(call BuildPackage,$(PKG_NAME)-7621mmcbin))
-$(eval $(call BuildPackage,$(PKG_NAME)-7621nobin))
